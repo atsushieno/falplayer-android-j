@@ -1,11 +1,13 @@
 package name.atsushieno.falplayer;
 
 import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
 import java.io.StreamCorruptedException;
 import java.io.StringReader;
 import java.nio.CharBuffer;
@@ -13,6 +15,9 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
+
+import nativeandroid.tremolo.OggStreamBuffer;
+import nativeandroid.tremolo.OggVorbisComment;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -65,9 +70,13 @@ public class Player
         List<String> l = new Vector<String>();
         String hist = preferences.getString ("history.txt", null); 
         if (hist != null)
-            for (String file : IOUtils.readLines (new StringReader(hist)))
-                if (file != null && file.length() > 0)
-                    l.add(file);
+        	try {
+	            for (String file : IOUtils.readLines (new StringReader(hist)))
+	                if (file != null && file.length() > 0)
+	                    l.add(file);
+        	} catch (IOException ex) {
+        		// should not happen. ignore
+        	}
         return l;
     }
 
@@ -78,7 +87,12 @@ public class Player
     	if (!hist.contains (abspath)) {
     		Context ctx = activity.getApplicationContext();
     		SharedPreferences sp = ctx.getSharedPreferences ("falplayer", Context.MODE_PRIVATE);
-    		List<String> allhist = IOUtils.readLines(new StringReader (sp.getString("history.txt", "")));
+    		List<String> allhist = null;
+    		try {
+    			allhist = IOUtils.readLines(new StringReader (sp.getString ("history.txt", "")));
+    		} catch (IOException ex) {
+    			// ignore. should not happen.
+    		}
     		Editor ed = sp.edit();
     		ed.remove("history.txt");
     		StringBuilder sb = new StringBuilder ();
@@ -92,16 +106,22 @@ public class Player
     		ed.putString("history.txt", sb.toString());
         }
 
-        InputStream input = new FileInputStream (file);
-        vorbis_buffer = new OggStreamBuffer (input);
+    	try {
+        vorbis_buffer = new OggStreamBuffer (new RandomAccessFile (file, "r"));
         loop = new LoopCommentExtension (vorbis_buffer);
         initializeVorbisBuffer ();
+    	} catch (IOException ex) {
+    		AlertDialog.Builder ab = new AlertDialog.Builder (activity.getApplicationContext());
+    		ab.setTitle("error");
+    		ab.setMessage("file could not be opened: ".concat(file.getName()));
+    		ab.create().show();
+    	}
     }
 
     public void initializeVorbisBuffer ()
     {
         view.initialize (loop.getTotal () * 4, loop.getStart () * 4, loop.getLength () * 4, loop.getEnd ()* 4, vorbis_buffer.getTotalTime (-1));
-        task.LoadVorbisBuffer (vorbis_buffer, loop);
+        task.loadVorbisBuffer (vorbis_buffer, loop);
     }
 
     public LoopCommentExtension getLoop ()
@@ -178,10 +198,11 @@ public class Player
         public final static int Paused = 2;
     }
 
+    static final int min_buf_size = AudioTrack.getMinBufferSize (44100 / CompressionRate * 2, AudioFormat.CHANNEL_CONFIGURATION_STEREO, AudioFormat.ENCODING_PCM_16BIT);
+
     class CorePlayer implements Runnable
     {
     	static final int CompressionRate = Player.CompressionRate; 
-        static final int min_buf_size = AudioTrack.getMinBufferSize (44100 / CompressionRate * 2, AudioFormat.CHANNEL_CONFIGURATION_STEREO, AudioFormat.ENCODING_PCM_16BIT);
         int buf_size = min_buf_size * 8;
 
         AudioTrack audio;
@@ -274,7 +295,11 @@ public class Player
     		if (pause) {
     		    pause = false;
     		    audio.pause ();
-    		    pause_handle.wait();
+    		    try {
+    		    	pause_handle.wait();
+    		    } catch (InterruptedException ex) {
+    		    	break;
+    		    }
     		    audio.play ();
     		}
     		long size = player.vorbis_buffer.read (buffer, 0, buffer.length);
@@ -346,38 +371,38 @@ class LoopCommentExtension
 
     public LoopCommentExtension (OggStreamBuffer owner)
     {
-    total = owner.GetTotalPcm (-1);
-    for (OggVorbisComment cmt : owner.GetComment(-1).Comments)
-    {
-    String comment = cmt.replace(" ", ""); // trim spaces
-    if (comment.startsWith("LOOPSTART="))
-    loop_start = Integer.parseInt (comment.substring("LOOPSTART=".length ()));
-    if (comment.startsWith("LOOPLENGTH="))
-    loop_length = Integer.parseInt (comment.substring("LOOPLENGTH=".length ()));
-    }
-
-    if (loop_start > 0 && loop_length > 0)
-    loop_end = (loop_start + loop_length);
+	    total = owner.getTotalPcm (-1);
+	    for (String cmt : owner.getComment(-1).getComments())
+	    {
+		    String comment = cmt.replace(" ", ""); // trim spaces
+		    if (comment.startsWith("LOOPSTART="))
+		    loop_start = Integer.parseInt (comment.substring("LOOPSTART=".length ()));
+		    if (comment.startsWith("LOOPLENGTH="))
+		    loop_length = Integer.parseInt (comment.substring("LOOPLENGTH=".length ()));
+		    }
+	
+	    if (loop_start > 0 && loop_length > 0)
+	    	loop_end = (loop_start + loop_length);
     }
 
     public long getStart()
     {
-    return loop_start;
+    	return loop_start;
     }
 
     public long getLength ()
     {
-    return loop_length;
+    	return loop_length;
     }
 
     public long getEnd ()
     {
-    return loop_end;
+    	return loop_end;
     }
 
     public long getTotal ()
     {
-    return total;
+    	return total;
     }
 }
 
