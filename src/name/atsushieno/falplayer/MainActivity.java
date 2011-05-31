@@ -9,6 +9,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
+import nativeandroid.dirent.DirectoryEntry;
+
+import nativeandroid.dirent.DirectoryIterator;
+
 import org.apache.commons.io.IOUtils;
 
 import android.app.Activity;
@@ -37,36 +41,32 @@ public class MainActivity extends Activity {
     Player player;
     TitleDatabase title_database;
 
-	void CreateSongDirectoryList ()
+	void createSongDirectoryList ()
     {
-		/*
-        var ifs = IsolatedStorageFile.GetUserStoreForApplication();
-        var list = GetOggDirectories ("/");
-        using (var sw = new StreamWriter(ifs.CreateFile("songdirs.txt")))
-            foreach (var dir in list)
-                sw.WriteLine(dir);
-		*/
+		SharedPreferences sp = this.getSharedPreferences("falplayer", Context.MODE_PRIVATE);
+		List<String> list = new Vector ();
+		getOggDirectories ("/", list);
+		StringBuilder sb = new StringBuilder ();
+		for (String dir : list) {
+			sb.append(dir);
+			sb.append('\n');
+		}
+		sp.edit().putString("songdirs.txt", sb.toString ());
     }
-
-    List<String> GetOggDirectories (String path)
+	
+    void getOggDirectories (String path, List<String> list)
     {
-    	/*
-        for (var dir : Directory.EnumerateDirectories (path))
-        {
-            // FIXME: not sure why, but EnumerateFiles (dir, "*.ogg") fails.
-            // FIXME: case insensitive search is desired.
-            string [] files;
-            try {
-                files = Directory.GetFiles (dir, "*.ogg");
-            } catch (UnauthorizedAccessException) {
-                continue;
-            }
-            if (files.Any ())
-                yield return dir;
-            foreach (var sub in GetOggDirectories (dir))
-                yield return sub;
-        }
-        */
+    	DirectoryIterator di = new DirectoryIterator (path);
+    	boolean hasOgg = false;
+    	do {
+    		DirectoryEntry de = di.next();
+    		if (de == null)
+    			break;
+    		if (de.getEntryType() == DirectoryIterator.ENTRY_TYPE_DIR)
+    			getOggDirectories (path.concat(File.separator).concat(de.getName()), list);
+    		if (!hasOgg && de.getName().matches("(?i)\\.ogg"))
+    			list.add (path);
+    	} while (true);
     }
 }
 
@@ -122,7 +122,7 @@ class PlayerView implements SeekBar.OnSeekBarChangeListener
 	{
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-		    CreateSongDirectoryList ();
+		    createSongDirectoryList ();
 		    load_button.setEnabled (true);
 		}
 	}
@@ -303,18 +303,29 @@ class PlayerView implements SeekBar.OnSeekBarChangeListener
        setPlayerEnabled (true);
        reset ();
    }
+   
+   class PlayerRunnable implements Runnable
+   {
+	   public PlayerRunnable (PlayerView pv)
+	   {
+		   this.pv = pv;
+	   }
+	   PlayerView pv;
+		@Override
+		public void run() {
+		    play_button.setText ("Play");
+		    timeline_text_view.setText (getTimeline (0, 0));
+		    // Since our AudioTrack bitrate is fake, those markers must be faked too.
+		    seekbar.setMax ((int) total_length);
+		    seekbar.setProgress (0);
+		    seekbar.setSecondaryProgress ((int) loop_end);
+		    seekbar.setOnSeekBarChangeListener(pv);
+		}		   
+   }
 
    public void reset ()
    {
-       activity.runOnUiThread (new Runnable () { public void run () {
-           play_button.setText ("Play");
-           timeline_text_view.setText (getTimeline (0, 0));
-           // Since our AudioTrack bitrate is fake, those markers must be faked too.
-           seekbar.setMax ((int) total_length);
-           seekbar.setProgress (0);
-           seekbar.setSecondaryProgress ((int) loop_end);
-           seekbar.setOnSeekBarChangeListener(this);
-           }});
+       activity.runOnUiThread (new PlayerRunnable (this));
    }
 
    boolean player_enabled;
@@ -375,8 +386,8 @@ class PlayerView implements SeekBar.OnSeekBarChangeListener
    {
        return String.format ("loop: %d / cur: %d / end: %d\ntime: %s / %s",
            loops, pos, loop_end,
-           date_format.format("mm:ss.ff", playTime),
-           date_format.format("mm:ss.ff", total_time));
+           date_format.format(new Date (playTime)),
+           date_format.format(total_time));
    }
    
 	class ReportProgressRunnable implements Runnable
