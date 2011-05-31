@@ -1,4 +1,4 @@
-package name.atsushieno.falplayer;
+package name.atsushieno.falplayerj;
 
 import java.io.File;
 
@@ -51,12 +51,12 @@ public class Player
     long start_time;
     SharedPreferences preferences;
 
-    public Player (TitleDatabase database, MainActivity activity)
+    public Player (TitleDatabase database, FalplayerActivity activity)
     {
         initialize (database, activity);
     }
 
-    void initialize (TitleDatabase database, MainActivity activity)
+    void initialize (TitleDatabase database, FalplayerActivity activity)
     {
         this.activity = activity;
         view = new PlayerView (this, database, activity);
@@ -425,7 +425,7 @@ class TitleDatabase
 
     List<SongData> list;
 
-    public TitleDatabase (MainActivity activity)
+    public TitleDatabase (FalplayerActivity activity)
     {
 	    list = new Vector<SongData> ();
 	    try {

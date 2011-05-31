@@ -1,4 +1,4 @@
-package name.atsushieno.falplayer;
+package name.atsushieno.falplayerj;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
+import name.atsushieno.falplayerj.R;
 import nativeandroid.dirent.DirectoryEntry;
 
 import nativeandroid.dirent.DirectoryIterator;
@@ -27,7 +28,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 
-public class MainActivity extends Activity {
+public class FalplayerActivity extends Activity {
 
     /** Called when the activity is first created. */
     @Override
@@ -80,7 +81,7 @@ class PlayerView implements SeekBar.OnSeekBarChangeListener
     final String from_history_tag = "<from history>";
     Player player;
     TitleDatabase database;
-    MainActivity activity;
+    FalplayerActivity activity;
     Button load_button, play_button, stop_button, rescan_button;
     TextView title_text_view, timeline_text_view;
     SeekBar seekbar;
@@ -89,7 +90,7 @@ class PlayerView implements SeekBar.OnSeekBarChangeListener
     int loops;
     SharedPreferences preferences;
     
-	public PlayerView (Player player, TitleDatabase database, MainActivity activity)
+	public PlayerView (Player player, TitleDatabase database, FalplayerActivity activity)
 	{
 		date_format = DateFormat.getTimeInstance();
 
