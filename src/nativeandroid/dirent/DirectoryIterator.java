@@ -24,7 +24,7 @@ public class DirectoryIterator implements Iterator<DirectoryEntry>
 	public DirectoryIterator (String path)
 	{
 		this.path = path;
-		d = direntLibrary.opendir(path);
+		d = direntLibrary.opendir(Pointer.pointerToCString(path));
 		de = new DirectoryEntry (this);
 	}
 

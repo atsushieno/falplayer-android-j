@@ -13,8 +13,10 @@ import name.atsushieno.falplayerj.R;
 import nativeandroid.dirent.DirectoryEntry;
 
 import nativeandroid.dirent.DirectoryIterator;
+import nativeandroid.unistd.jnaerated.unistdLibrary;
 
 import org.apache.commons.io.IOUtils;
+import org.bridj.Pointer;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -57,14 +59,23 @@ public class FalplayerActivity extends Activity {
 	
     void getOggDirectories (String path, List<String> list)
     {
+    	if (unistdLibrary.access(Pointer.pointerToCString(path), unistdLibrary.X_OK) != 0)
+    		return;
+    	if (path.equals("/proc") || path.equals ("/sys/devices/virtual"))
+    		return;
     	DirectoryIterator di = new DirectoryIterator (path);
     	boolean hasOgg = false;
     	do {
     		DirectoryEntry de = di.next();
     		if (de == null)
     			break;
-    		if (de.getEntryType() == DirectoryIterator.ENTRY_TYPE_DIR)
-    			getOggDirectories (path.concat(File.separator).concat(de.getName()), list);
+    		if (de.getEntryType() == DirectoryIterator.ENTRY_TYPE_DIR) {
+    			String dn = de.getName();
+    			if (!dn.equals(".") && !dn.equals ("..")) {
+            		android.util.Log.d("falplayerXXXXX", (path.equals("/") ? "" : path).concat(File.separator).concat(de.getName()));
+    				getOggDirectories ((path.equals("/") ? "" : path).concat(File.separator).concat(dn), list);
+    			}
+    		}
     		if (!hasOgg && de.getName().matches("(?i)\\.ogg"))
     			list.add (path);
     	} while (true);

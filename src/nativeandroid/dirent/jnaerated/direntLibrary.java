@@ -17,15 +17,86 @@ public class direntLibrary {
 	static {
 		BridJ.register();
 	}
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int _SVID_SOURCE = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_XOPEN2K = (int)1;
+	/// <i>native declaration : /usr/include/bits/wchar.h</i>
+	public static final int __WCHAR_MAX = (int)(2147483647);
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __GLIBC_MINOR__ = (int)13;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __GLIBC_HAVE_LONG_LONG = (int)1;
+	public static final int DT_DIR = (int)4;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int _BSD_SOURCE = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_POSIX = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_SVID = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_ISOC99 = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_ISOC95 = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int _FEATURES_H = (int)1;
+	/// <i>native declaration : /usr/include/bits/wordsize.h</i>
+	public static final int __WORDSIZE = (int)64;
+	public static final int DT_FIFO = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_POSIX2 = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int _POSIX_SOURCE = (int)1;
+	/// <i>native declaration : /usr/include/bits/predefs.h</i>
+	public static final int __STDC_IEC_559__ = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_XOPEN2K8 = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_ATFILE = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __GLIBC__ = (int)2;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_FORTIFY_LEVEL = (int)0;
 	public static final int DT_BLK = (int)6;
+	/// <i>native declaration : /usr/include/bits/wchar.h</i>
+	public static final int _BITS_WCHAR_H = (int)1;
 	public static final int DT_CHR = (int)2;
 	public static final int DT_WHT = (int)14;
-	public static final int DT_FIFO = (int)1;
-	public static final int DT_SOCK = (int)12;
-	public static final int DT_DIR = (int)4;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __STDC_ISO_10646__ = (int)200009;
+	/// <i>native declaration : /usr/include/sys/cdefs.h</i>
+	public static final int _SYS_CDEFS_H = (int)1;
+	/// <i>native declaration : /usr/include/bits/predefs.h</i>
+	public static final int __STDC_IEC_559_COMPLEX__ = (int)1;
+	/// <i>native declaration : /usr/include/stdint.h</i>
+	public static final int _STDINT_H = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_POSIX199309 = (int)1;
 	public static final int DT_REG = (int)8;
-	public static final int DT_LNK = (int)10;
 	public static final int DT_UNKNOWN = (int)0;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_POSIX199506 = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_POSIX_IMPLICITLY = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_BSD = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_MISC = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int _ATFILE_SOURCE = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __GNU_LIBRARY__ = (int)6;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int __USE_ANSI = (int)1;
+	public static final int DT_SOCK = (int)12;
+	public static final int DT_LNK = (int)10;
+	/// <i>native declaration : /usr/include/bits/wordsize.h</i>
+	public static final int __WORDSIZE_COMPAT32 = (int)1;
+	/// <i>native declaration : /usr/include/features.h</i>
+	public static final int _POSIX_C_SOURCE = (int)200809;
+	/// <i>native declaration : /usr/include/bits/wchar.h</i>
+	public static final int __WCHAR_MIN = (int)(direntLibrary.__WCHAR_MAX - 1);
+	/*
 	/// <i>native declaration : /usr/include/sys/cdefs.h:0</i>
 	public static abstract class scandir_arg1_filter_callback extends Callback<scandir_arg1_filter_callback > {
 		public abstract int apply(Pointer<dirent > direntPtr1);
@@ -34,8 +105,9 @@ public class direntLibrary {
 	public static abstract class scandir_arg2_compar_callback extends Callback<scandir_arg2_compar_callback > {
 		public abstract int apply(Pointer<Pointer<dirent > > direntPtrPtr1, Pointer<Pointer<dirent > > direntPtrPtr2);
 	};
+	*/
 	public static native int getdents(int int1, Pointer<dirent > direntPtr1, int int2);
-	public static native Pointer<direntLibrary.DIR > opendir(String dirpath);
+	public static native Pointer<direntLibrary.DIR > opendir(Pointer<Byte > dirpath);
 	public static native Pointer<direntLibrary.DIR > fdopendir(int fd);
 	public static native Pointer<dirent > readdir(Pointer<direntLibrary.DIR > dirp);
 	public static native int readdir_r(Pointer<direntLibrary.DIR > dirp, Pointer<dirent > entry, Pointer<Pointer<dirent > > result);
@@ -43,7 +115,7 @@ public class direntLibrary {
 	public static native void rewinddir(Pointer<direntLibrary.DIR > dirp);
 	public static native int dirfd(Pointer<direntLibrary.DIR > dirp);
 	public static native int alphasort(Pointer<? > a, Pointer<? > b);
-	public static native int scandir(Pointer<Byte > dir, Pointer<Pointer<Pointer<dirent > > > namelist, Pointer<direntLibrary.scandir_arg1_filter_callback > arg1, Pointer<direntLibrary.scandir_arg2_compar_callback > arg2);
+//	public static native int scandir(Pointer<Byte > dir, Pointer<Pointer<Pointer<dirent > > > namelist, Pointer<direntLibrary.scandir_arg1_filter_callback > arg1, Pointer<direntLibrary.scandir_arg2_compar_callback > arg2);
 	/// Undefined type
 	public static interface DIR {
 		
