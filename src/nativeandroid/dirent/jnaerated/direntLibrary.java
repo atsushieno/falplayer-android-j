@@ -96,7 +96,6 @@ public class direntLibrary {
 	public static final int _POSIX_C_SOURCE = (int)200809;
 	/// <i>native declaration : /usr/include/bits/wchar.h</i>
 	public static final int __WCHAR_MIN = (int)(direntLibrary.__WCHAR_MAX - 1);
-	/*
 	/// <i>native declaration : /usr/include/sys/cdefs.h:0</i>
 	public static abstract class scandir_arg1_filter_callback extends Callback<scandir_arg1_filter_callback > {
 		public abstract int apply(Pointer<dirent > direntPtr1);
@@ -105,7 +104,6 @@ public class direntLibrary {
 	public static abstract class scandir_arg2_compar_callback extends Callback<scandir_arg2_compar_callback > {
 		public abstract int apply(Pointer<Pointer<dirent > > direntPtrPtr1, Pointer<Pointer<dirent > > direntPtrPtr2);
 	};
-	*/
 	public static native int getdents(int int1, Pointer<dirent > direntPtr1, int int2);
 	public static native Pointer<direntLibrary.DIR > opendir(Pointer<Byte > dirpath);
 	public static native Pointer<direntLibrary.DIR > fdopendir(int fd);
@@ -115,7 +113,7 @@ public class direntLibrary {
 	public static native void rewinddir(Pointer<direntLibrary.DIR > dirp);
 	public static native int dirfd(Pointer<direntLibrary.DIR > dirp);
 	public static native int alphasort(Pointer<? > a, Pointer<? > b);
-//	public static native int scandir(Pointer<Byte > dir, Pointer<Pointer<Pointer<dirent > > > namelist, Pointer<direntLibrary.scandir_arg1_filter_callback > arg1, Pointer<direntLibrary.scandir_arg2_compar_callback > arg2);
+	public static native int scandir(Pointer<Byte > dir, Pointer<Pointer<Pointer<dirent > > > namelist, Pointer<direntLibrary.scandir_arg1_filter_callback > arg1, Pointer<direntLibrary.scandir_arg2_compar_callback > arg2);
 	/// Undefined type
 	public static interface DIR {
 		

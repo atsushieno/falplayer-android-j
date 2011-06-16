@@ -9,7 +9,7 @@ import org.bridj.ann.Library;
  * a tool written by <a href="http://ochafik.free.fr/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> or <a href="http://bridj.googlecode.com/">BridJ</a> .
  */
-@Library("nativeandroid.tremolo.jnaerated") 
+@Library("vorbisidec") 
 public class ogg_packet extends StructObject {
 	public ogg_packet() {
 		super();

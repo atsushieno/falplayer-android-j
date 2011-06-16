@@ -23,6 +23,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +38,7 @@ public class FalplayerActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        org.bridj.AndroidSupport.setApplication(getApplication());
 
         title_database = new TitleDatabase (this);
         player = new Player(title_database, this);
@@ -49,24 +51,56 @@ public class FalplayerActivity extends Activity {
 		SharedPreferences sp = this.getSharedPreferences("falplayer", Context.MODE_PRIVATE);
 		List<String> list = new Vector ();
 		getOggDirectories ("/", list);
+		//getOggDirectories (new File ("/"), list);
+		android.util.Log.d("FALPLAYERXXXXX", "directory listing done");
 		StringBuilder sb = new StringBuilder ();
 		for (String dir : list) {
 			sb.append(dir);
 			sb.append('\n');
 		}
-		sp.edit().putString("songdirs.txt", sb.toString ());
+		Editor ed = sp.edit();
+		ed.putString("songdirs.txt", sb.toString ());
+		ed.commit();
     }
+	
+	void getOggDirectories (File dir, List<String> list)
+	{
+		boolean hasOgg = false;
+		String abs = dir.getAbsolutePath();
+android.util.Log.d("falplayerXXXXX", abs);
+    	if (abs.equals("/proc") || abs.equals ("/sys") || abs.equals(("/data")))
+    		return;
+		File [] fl = dir.listFiles();
+		if (fl == null)
+			return;
+		for (File f : fl) {
+			if (f.isDirectory()) {
+				f = f.getAbsoluteFile();
+				getOggDirectories (f, list);
+			}
+			if (!hasOgg) {
+				if (f.getName().toLowerCase().endsWith(".ogg")) {
+					hasOgg = true;
+					list.add(dir.getAbsolutePath());
+				}
+			}
+		}
+	}
 	
     void getOggDirectories (String path, List<String> list)
     {
+if (path.startsWith("/data")) android.util.Log.d("falplayerXXXXX", "1");
     	if (unistdLibrary.access(Pointer.pointerToCString(path), unistdLibrary.X_OK) != 0)
     		return;
-    	if (path.equals("/proc") || path.equals ("/sys/devices/virtual"))
+    	if (path.equals("/proc") || path.equals ("/sys") || path.equals("/data"))
     		return;
+if (path.startsWith("/data")) android.util.Log.d("falplayerXXXXX", "2");
     	DirectoryIterator di = new DirectoryIterator (path);
+if (path.startsWith("/data")) android.util.Log.d("falplayerXXXXX", "3");
     	boolean hasOgg = false;
     	do {
     		DirectoryEntry de = di.next();
+if (path.startsWith("/data")) android.util.Log.d("falplayerXXXXX", "4");
     		if (de == null)
     			break;
     		if (de.getEntryType() == DirectoryIterator.ENTRY_TYPE_DIR) {
@@ -76,8 +110,10 @@ public class FalplayerActivity extends Activity {
     				getOggDirectories ((path.equals("/") ? "" : path).concat(File.separator).concat(dn), list);
     			}
     		}
-    		if (!hasOgg && de.getName().matches("(?i)\\.ogg"))
+    		if (!hasOgg && de.getName().toLowerCase().endsWith(".ogg")) {
+    			hasOgg = true;
     			list.add (path);
+    		}
     	} while (true);
     }
 }
@@ -198,7 +234,8 @@ class PlayerView implements SeekBar.OnSeekBarChangeListener
 	    		    	dirlist.add (s);
     		} catch (IOException ex) { // should not happen
     		}
-    		String[] dirs = (String[]) dirlist.toArray();
+    		String[] dirs = new String [dirlist.size()];
+    		dirlist.toArray(dirs);
     		
     	    db.setItems (dirs, new FileDialogOKClickListener (dirs));
     	    db.show ();
@@ -253,15 +290,15 @@ class PlayerView implements SeekBar.OnSeekBarChangeListener
    }
    
    FilenameFilter ogg_filter = new FilenameFilter () {
-   	public boolean accept (File file, String filename)
+	   public boolean accept (File file, String filename)
 		{
-			return file.getName().toLowerCase().endsWith("*.ogg"); 
+			return filename.toLowerCase().endsWith(".ogg"); 
 		}
    };
 
    void processFileSelectionDialog (String dir, FileSelectionAction action)
    {
-   	List<File> l = new Vector<File> ();
+	   List<File> l = new Vector<File> ();
        if (dir == from_history_tag) {
            for (String s : player.getPlayHistory ())
            	l.add(new File (s));
@@ -281,7 +318,9 @@ class PlayerView implements SeekBar.OnSeekBarChangeListener
            	String title = database.getTitle(f.getName(), f.length());
            	files.add(title != null ? title : f.getName());
            	}
-           db.setItems ((String[]) files.toArray(), new FileSelectorDialogClickListener (l, files, action));
+           String [] arr = new String [files.size()];
+           files.toArray(arr);
+           db.setItems (arr, new FileSelectorDialogClickListener (l, files, action));
        }
        db.show().show();
    }

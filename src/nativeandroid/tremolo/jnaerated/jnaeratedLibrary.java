@@ -1,5 +1,7 @@
 package nativeandroid.tremolo.jnaerated;
 
+import nativeandroid.stdio.jnaerated.FILE;
+
 import org.bridj.BridJ;
 import org.bridj.Pointer;
 import org.bridj.ann.CLong;
@@ -12,7 +14,7 @@ import org.bridj.cpp.CPPRuntime;
  * a tool written by <a href="http://ochafik.free.fr/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> or <a href="http://bridj.googlecode.com/">BridJ</a> .
  */
-@Library("nativeandroid.tremolo.jnarated") 
+@Library("vorbisidec") 
 @Runtime(CPPRuntime.class) 
 public class jnaeratedLibrary {
 	static {
@@ -46,9 +48,9 @@ public class jnaeratedLibrary {
 	public static native void vorbis_comment_clear(Pointer<vorbis_comment > vc);
 
 	public static native int ov_clear(Pointer<OggVorbis_File > vf);
-	public static native int ov_open(Pointer<jnaeratedLibrary.FILE > f, Pointer<OggVorbis_File > vf, Pointer<Byte > initial, @CLong long ibytes);
+	public static native int ov_open(Pointer<FILE > f, Pointer<OggVorbis_File > vf, Pointer<Byte > initial, @CLong long ibytes);
 	public static native int ov_open_callbacks(Pointer<? > datasource, Pointer<OggVorbis_File > vf, Pointer<Byte > initial, @CLong long ibytes, ov_callbacks callbacks);
-	public static native int ov_test(Pointer<jnaeratedLibrary.FILE > f, Pointer<OggVorbis_File > vf, Pointer<Byte > initial, @CLong long ibytes);
+	public static native int ov_test(Pointer<FILE > f, Pointer<OggVorbis_File > vf, Pointer<Byte > initial, @CLong long ibytes);
 	public static native int ov_test_callbacks(Pointer<? > datasource, Pointer<OggVorbis_File > vf, Pointer<Byte > initial, @CLong long ibytes, ov_callbacks callbacks);
 	public static native int ov_test_open(Pointer<OggVorbis_File > vf);
 	public static native long ov_bitrate(Pointer<OggVorbis_File > vf, int i);
@@ -74,10 +76,6 @@ public class jnaeratedLibrary {
 
 	/// Undefined type
 	public static interface vorbis_dsp_state {
-		
-	};
-	/// Undefined type
-	public static interface FILE {
 		
 	};
 }

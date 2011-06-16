@@ -2,7 +2,7 @@ package nativeandroid.tremolo;
 
 import org.bridj.Pointer;
 import nativeandroid.tremolo.jnaerated.*;
-import nativeandroid.tremolo.jnaerated.jnaeratedLibrary.FILE;
+import nativeandroid.stdio.jnaerated.FILE;
 
 /*
 

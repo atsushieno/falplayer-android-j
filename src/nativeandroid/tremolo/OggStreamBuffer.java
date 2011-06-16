@@ -8,6 +8,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
+import nativeandroid.stdio.jnaerated.stdioLibrary;
 import nativeandroid.tremolo.jnaerated.jnaeratedLibrary;
 import nativeandroid.tremolo.jnaerated.ov_callbacks;
 import nativeandroid.tremolo.jnaerated.OggVorbis_File;
@@ -102,7 +103,6 @@ public class OggStreamBuffer
 		}
 	}
 
-	/*
 	public OggStreamBuffer (String path)
 	{
 		this (path, Charset.defaultCharset());
@@ -111,11 +111,11 @@ public class OggStreamBuffer
 	public OggStreamBuffer (String path, Charset textEncoding)
 	{
 		text_encoding = textEncoding;
-		OvMarshal.ov_open (OvMarshal.fopen (path, "r") , Pointer.pointerTo(vorbis_file), null, 0);
+		jnaeratedLibrary.ov_open(stdioLibrary.fopen(Pointer.pointerToCString(path), Pointer.pointerToCString("r")), Pointer.pointerTo(vorbis_file), Pointer.NULL, 0);
+		//OvMarshal.ov_open (OvMarshal.fopen (path, "r") , Pointer.pointerTo(vorbis_file), null, 0);
 		//handle_ovf = GCHandle.Alloc (vorbis_file, GCHandleType.Pinned);
 		callbacks = vorbis_file.callbacks();
 	}
-	*/
 
 	public OggStreamBuffer (RandomAccessFile stream)
 	{
