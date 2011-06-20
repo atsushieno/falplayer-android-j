@@ -49,7 +49,6 @@ public class Player
     LoopCommentExtension loop;
     CorePlayer task;
     long start_time;
-    SharedPreferences preferences;
 
     public Player (TitleDatabase database, FalplayerActivity activity)
     {
@@ -62,12 +61,12 @@ public class Player
         view = new PlayerView (this, database, activity);
         task = new CorePlayer (this);
         headset_status_receiver = new HeadphoneStatusReceiver (this);
-        preferences = activity.getSharedPreferences("falplayer", Context.MODE_PRIVATE);
     }
 
     List<String> getPlayHistory ()
     {
         List<String> l = new Vector<String>();
+        SharedPreferences preferences = activity.getSharedPreferences("falplayer", Context.MODE_PRIVATE);
         String hist = preferences.getString ("history.txt", null); 
         if (hist != null)
         	try {
@@ -106,8 +105,12 @@ public class Player
     		ed.putString("history.txt", sb.toString());
         }
 
+
+		vorbis_buffer = new OggStreamBuffer (file.getAbsolutePath());
+		loop = new LoopCommentExtension (vorbis_buffer);
+		initializeVorbisBuffer ();
+		/*
     	try {
-//          vorbis_buffer = new OggStreamBuffer (file.getAbsolutePath());
 	        vorbis_buffer = new OggStreamBuffer (new RandomAccessFile (file, "r"));
 	        loop = new LoopCommentExtension (vorbis_buffer);
 	        initializeVorbisBuffer ();
@@ -117,6 +120,7 @@ public class Player
     		ab.setMessage("file could not be opened: ".concat(file.getName()));
     		ab.create().show();
     	}
+    	*/
     }
 
     public void initializeVorbisBuffer ()
@@ -247,9 +251,10 @@ public class Player
 
         public void resume ()
         {
+            if (status == PlayerStatus.Paused)
+                pause_handle.notify ();
             status = PlayerStatus.Playing;
             pause = false; // make sure to not get overwritten
-            pause_handle.notify ();
         }
 
         long last_seek;
@@ -269,8 +274,9 @@ public class Player
 
         public void stop ()
         {
-            finish = true; // and let player loop finish.
-            pause_handle.notify ();
+        	if (status == PlayerStatus.Paused)
+        		pause_handle.notify ();
+      		finish = true; // and let player loop finish.
         }
 
         public void start ()

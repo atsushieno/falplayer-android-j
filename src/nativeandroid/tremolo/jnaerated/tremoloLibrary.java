@@ -60,7 +60,7 @@ public class tremoloLibrary {
 	public static native long ov_serialnumber(Pointer<OggVorbis_File > vf, int i);
 	public static native long ov_raw_total(Pointer<OggVorbis_File > vf, int i);
 	public static native long ov_pcm_total(Pointer<OggVorbis_File > vf, int i);
-	public static native long ov_time_total(Pointer<OggVorbis_File > vf, int i);
+	public static native int ov_time_total(Pointer<OggVorbis_File > vf, int i); // FIXME: HTC Desire expects int retval here.
 	public static native int ov_raw_seek(Pointer<OggVorbis_File > vf, long pos);
 	public static native int ov_pcm_seek(Pointer<OggVorbis_File > vf, long pos);
 	public static native int ov_pcm_seek_page(Pointer<OggVorbis_File > vf, long pos);
@@ -71,8 +71,7 @@ public class tremoloLibrary {
 	public static native long ov_time_tell(Pointer<OggVorbis_File > vf);
 	public static native Pointer<vorbis_info > ov_info(Pointer<OggVorbis_File > vf, int link);
 	public static native Pointer<vorbis_comment > ov_comment(Pointer<OggVorbis_File > vf, int link);
-	// FIXME: HTC Desire expects int here.
-	public static native int ov_read(Pointer<OggVorbis_File > vf, Pointer<? > buffer, int length, Pointer<Integer > bitstream);
+	public static native int ov_read(Pointer<OggVorbis_File > vf, Pointer<? > buffer, int length, Pointer<Integer > bitstream); // FIXME: HTC Desire expects int retval here.
 
 	/// Undefined type
 	public static interface vorbis_dsp_state {

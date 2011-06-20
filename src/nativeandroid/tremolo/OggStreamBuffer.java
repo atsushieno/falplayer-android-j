@@ -8,6 +8,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
+import nativeandroid.stdio.jnaerated.FILE;
 import nativeandroid.stdio.jnaerated.stdioLibrary;
 import nativeandroid.tremolo.jnaerated.tremoloLibrary;
 import nativeandroid.tremolo.jnaerated.ov_callbacks;
@@ -111,7 +112,10 @@ public class OggStreamBuffer
 	public OggStreamBuffer (String path, Charset textEncoding)
 	{
 		text_encoding = textEncoding;
-		tremoloLibrary.ov_open(stdioLibrary.fopen(Pointer.pointerToCString(path), Pointer.pointerToCString("r")), Pointer.pointerTo(vorbis_file), Pointer.NULL, 0);
+		vorbis_file = new OggVorbis_File ();
+		file = stdioLibrary.fopen(Pointer.pointerToCString(path), Pointer.pointerToCString("r"));
+		Pointer<OggVorbis_File> ov = Pointer.pointerTo(vorbis_file);
+		tremoloLibrary.ov_open(file, ov, Pointer.NULL, 0);
 		callbacks = vorbis_file.callbacks();
 	}
 
@@ -134,8 +138,9 @@ public class OggStreamBuffer
 		tremoloLibrary.ov_open_callbacks(vfp(), vfp(), null, 0, callbacks);
 		//handle_ovf = GCHandle.Alloc (vorbis_file, GCHandleType.Pinned);
 	}
-
+	
 	RandomAccessFile stream;
+	Pointer<FILE> file = Pointer.NULL;
 
 	//GCHandle handle_ovf;
 	Charset text_encoding;
@@ -162,106 +167,108 @@ public class OggStreamBuffer
 	public long getBitrateInstant() 
 	{
 		if (bitrate_instant == null)
-			bitrate_instant = OvMarshal.ov_bitrate_instant (vfp());
+			bitrate_instant = tremoloLibrary.ov_bitrate_instant (vfp());
 		return (long) bitrate_instant;
 	}
 
 	public long getStreams ()
 	{
 		if (streams == null)
-			streams = OvMarshal.ov_streams (vfp());
+			streams = tremoloLibrary.ov_streams (vfp());
 		return (long) streams;
 	}
 
 	public boolean Seekable ()
 	{
 		if (seekable == null)
-			seekable = OvMarshal.ov_seekable (vfp()) != 0;
+			seekable = tremoloLibrary.ov_seekable (vfp()) != 0;
 		return (boolean) seekable;
 	}
 
 	protected void finalize()
 	{
-		OvMarshal.ov_clear (vfp());
+		if (file != Pointer.NULL)
+			stdioLibrary.fclose(file);
+		//OvMarshal.ov_clear (vfp());
 		//if (handle_ovf.IsAllocated)
 		//	handle_ovf.Free ();
 	}
 
 	public int getBitrate (int i)
 	{
-		long ret = OvMarshal.ov_bitrate (vfp(), i);
+		long ret = tremoloLibrary.ov_bitrate (vfp(), i);
 		return (int) ret;
 	}
 
 	public int getSerialNumber (int i)
 	{
-		long ret = OvMarshal.ov_serialnumber (vfp(), i);
+		long ret = tremoloLibrary.ov_serialnumber (vfp(), i);
 		return (int) ret;
 	}
 
 	public OggVorbisInfo getInfo (int i)
 	{
-		Pointer<vorbis_info> ret = OvMarshal.ov_info (vfp(), i);
+		Pointer<vorbis_info> ret = tremoloLibrary.ov_info (vfp(), i);
 		return new OggVorbisInfo (ret.get());
 	}
 
 	public OggVorbisComment getComment (int link)
 	{
-		Pointer<vorbis_comment> ret = OvMarshal.ov_comment (vfp(), link);
+		Pointer<vorbis_comment> ret = tremoloLibrary.ov_comment (vfp(), link);
 		return new OggVorbisComment (ret.get(), text_encoding);
 	}
 
 	public long getTotalRaw (int i)
 	{
-		long ret = OvMarshal.ov_raw_total (vfp(), i);
+		long ret = tremoloLibrary.ov_raw_total (vfp(), i);
 		return ret;
 	}
 
 	public long getTotalPcm (int i)
 	{
-		long ret = OvMarshal.ov_pcm_total (vfp(), i);
+		long ret = tremoloLibrary.ov_pcm_total (vfp(), i);
 		return ret;
 	}
 
 	public long getTotalTime (int i)
 	{
-		long ret = OvMarshal.ov_time_total (vfp(), i);
+		long ret = tremoloLibrary.ov_time_total (vfp(), i);
 		return ret;
 	}
 
 	public int seekRaw (long pos)
 	{
-		int ret = OvMarshal.ov_raw_seek (vfp(), pos);
+		int ret = tremoloLibrary.ov_raw_seek (vfp(), pos);
 		return ret;
 	}
 
 	public int seekPcm (long pos)
 	{
-		int ret = OvMarshal.ov_pcm_seek (vfp(), pos);
+		int ret = tremoloLibrary.ov_pcm_seek (vfp(), pos);
 		return ret;
 	}
 
 	public int seekTime (long pos)
 	{
-		int ret = OvMarshal.ov_time_seek (vfp(), pos);
+		int ret = tremoloLibrary.ov_time_seek (vfp(), pos);
 		return ret;
 	}
 
 	public long tellRaw ()
 	{
-		long ret = OvMarshal.ov_raw_tell (vfp());
+		long ret = tremoloLibrary.ov_raw_tell (vfp());
 		return ret;
 	}
 
 	public long tellPcm ()
 	{
-		long ret = OvMarshal.ov_pcm_tell (vfp());
+		long ret = tremoloLibrary.ov_pcm_tell (vfp());
 		return ret;
 	}
 
 	public long tellTime ()
 	{
-		long ret = OvMarshal.ov_time_tell (vfp());
+		long ret = tremoloLibrary.ov_time_tell (vfp());
 		return ret;
 	}
 
@@ -299,7 +306,7 @@ public class OggStreamBuffer
 	{
 		if (buf_length < length)
 			read_buf = Pointer.allocateBytes(length);
-		long ret = OvMarshal.ov_read (vfp (), read_buf, length, bitStream);
+		long ret = tremoloLibrary.ov_read (vfp (), read_buf, length, bitStream);
 		read_buf.getByteBuffer(ret).get(buffer, index, (int) ret);
 		return ret;
 	}
