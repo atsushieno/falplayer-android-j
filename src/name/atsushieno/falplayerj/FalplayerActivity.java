@@ -5,6 +5,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.DateFormat;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -67,7 +69,6 @@ public class FalplayerActivity extends Activity {
 	{
 		boolean hasOgg = false;
 		String abs = dir.getAbsolutePath();
-android.util.Log.d("falplayerXXXXX", abs);
     	if (abs.equals("/proc") || abs.equals ("/sys") || abs.equals(("/data")))
     		return;
 		File [] fl = dir.listFiles();
@@ -101,10 +102,8 @@ android.util.Log.d("falplayerXXXXX", abs);
     			break;
     		if (de.getEntryType() == DirectoryIterator.ENTRY_TYPE_DIR) {
     			String dn = de.getName();
-    			if (!dn.equals(".") && !dn.equals ("..")) {
-            		android.util.Log.d("falplayerXXXXX", (path.equals("/") ? "" : path).concat(File.separator).concat(de.getName()));
+    			if (!dn.equals(".") && !dn.equals (".."))
     				getOggDirectories ((path.equals("/") ? "" : path).concat(File.separator).concat(dn), list);
-    			}
     		}
     		if (!hasOgg && de.getName().toLowerCase().endsWith(".ogg")) {
     			hasOgg = true;
@@ -299,10 +298,17 @@ class PlayerView implements SeekBar.OnSeekBarChangeListener
            for (String s : player.getPlayHistory ())
            	l.add(new File (s));
        } else {
-       	File d = new File (dir);
-           if (d.exists())
-               for (File file : d.listFiles(ogg_filter))
+			File d = new File (dir);
+           if (d.exists()) {
+        	   File [] list = d.listFiles(ogg_filter);
+        	   Arrays.sort(list, new Comparator<File> () {
+    			   public int compare(File f1, File f2) {
+    				   return f1.getName ().compareTo(f2.getName ());
+    			   }
+    			});
+               for (File file : list)
                    l.add (file);
+           }
        }
        AlertDialog.Builder db = new AlertDialog.Builder(activity);
        if (l.size() == 0)

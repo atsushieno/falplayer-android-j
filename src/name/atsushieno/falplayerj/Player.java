@@ -103,6 +103,7 @@ public class Player
     				sb.append ('\n');
     			}
     		ed.putString("history.txt", sb.toString());
+    		ed.commit();
         }
 
 
@@ -419,7 +420,7 @@ class TitleDatabase
     {
 	    public SongData (String line)
 	    {
-		    String [] items = line.split("w");
+		    String [] items = line.split("\\s+");
 		    fileName = items [0];
 		    fileSize = Integer.parseInt (items [1]);
 		    title = line.substring (items [0].length () + 1 + items [1].length ()).trim ();
@@ -439,8 +440,8 @@ class TitleDatabase
 		    for (String ass : activity.getAssets ().list ("titles")) {
 			    InputStream stream = activity.getAssets ().open ("titles/" + ass);
 			    for (String line : IOUtils.readLines(stream))
-			    if (line != null && line.length ()> 0 && !line.startsWith ("//"))
-			    list.add (new SongData (line));
+			    	if (line != null && line.length () > 1 && line.charAt(0) != '/' && line.charAt(1) != '/')
+			    		list.add (new SongData (line));
 		    }
 	    } catch (IOException ex) {
 	    	android.util.Log.e("falplayer", "failed to read application asset 'titles'");
