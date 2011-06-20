@@ -9,7 +9,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 import nativeandroid.stdio.jnaerated.stdioLibrary;
-import nativeandroid.tremolo.jnaerated.jnaeratedLibrary;
+import nativeandroid.tremolo.jnaerated.tremoloLibrary;
 import nativeandroid.tremolo.jnaerated.ov_callbacks;
 import nativeandroid.tremolo.jnaerated.OggVorbis_File;
 import nativeandroid.tremolo.jnaerated.vorbis_comment;
@@ -111,9 +111,7 @@ public class OggStreamBuffer
 	public OggStreamBuffer (String path, Charset textEncoding)
 	{
 		text_encoding = textEncoding;
-		jnaeratedLibrary.ov_open(stdioLibrary.fopen(Pointer.pointerToCString(path), Pointer.pointerToCString("r")), Pointer.pointerTo(vorbis_file), Pointer.NULL, 0);
-		//OvMarshal.ov_open (OvMarshal.fopen (path, "r") , Pointer.pointerTo(vorbis_file), null, 0);
-		//handle_ovf = GCHandle.Alloc (vorbis_file, GCHandleType.Pinned);
+		tremoloLibrary.ov_open(stdioLibrary.fopen(Pointer.pointerToCString(path), Pointer.pointerToCString("r")), Pointer.pointerTo(vorbis_file), Pointer.NULL, 0);
 		callbacks = vorbis_file.callbacks();
 	}
 
@@ -133,7 +131,7 @@ public class OggStreamBuffer
 		callbacks.tell_func(new ov_tell ().toPointer());
 		vorbis_file = new OggVorbis_File ();
 		// first vfp is a dummy datasource.
-		jnaeratedLibrary.ov_open_callbacks(vfp(), vfp(), null, 0, callbacks);
+		tremoloLibrary.ov_open_callbacks(vfp(), vfp(), null, 0, callbacks);
 		//handle_ovf = GCHandle.Alloc (vorbis_file, GCHandleType.Pinned);
 	}
 

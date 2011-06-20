@@ -89,18 +89,14 @@ android.util.Log.d("falplayerXXXXX", abs);
 	
     void getOggDirectories (String path, List<String> list)
     {
-if (path.startsWith("/data")) android.util.Log.d("falplayerXXXXX", "1");
-    	if (unistdLibrary.access(Pointer.pointerToCString(path), unistdLibrary.X_OK) != 0)
+    	if (unistdLibrary.access(Pointer.pointerToCString(path), unistdLibrary.X_OK | unistdLibrary.R_OK) != 0)
     		return;
     	if (path.equals("/proc") || path.equals ("/sys") || path.equals("/data"))
     		return;
-if (path.startsWith("/data")) android.util.Log.d("falplayerXXXXX", "2");
     	DirectoryIterator di = new DirectoryIterator (path);
-if (path.startsWith("/data")) android.util.Log.d("falplayerXXXXX", "3");
     	boolean hasOgg = false;
     	do {
     		DirectoryEntry de = di.next();
-if (path.startsWith("/data")) android.util.Log.d("falplayerXXXXX", "4");
     		if (de == null)
     			break;
     		if (de.getEntryType() == DirectoryIterator.ENTRY_TYPE_DIR) {

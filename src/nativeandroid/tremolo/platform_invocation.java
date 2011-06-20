@@ -211,47 +211,47 @@ class OvMarshal
 
 	static void vorbis_info_init (Pointer<vorbis_info> vi)
 	{
-		jnaeratedLibrary.vorbis_info_init(vi);
+		tremoloLibrary.vorbis_info_init(vi);
 	}
 
 	static void vorbis_info_clear (Pointer<vorbis_info> vi)
 	{
-		jnaeratedLibrary.vorbis_info_clear(vi);
+		tremoloLibrary.vorbis_info_clear(vi);
 	}
 
 	static int vorbis_info_blocksize (Pointer<vorbis_info> vi, int zo)
 	{
-		return jnaeratedLibrary.vorbis_info_blocksize(vi, zo);
+		return tremoloLibrary.vorbis_info_blocksize(vi, zo);
 	}
 
 	static void vorbis_comment_init (Pointer<vorbis_comment> vc)
 	{
-		jnaeratedLibrary.vorbis_comment_init(vc);
+		tremoloLibrary.vorbis_comment_init(vc);
 	}
 
 	static void vorbis_comment_add (Pointer<vorbis_comment> vc, Pointer<Byte> comment)
 	{
-		jnaeratedLibrary.vorbis_comment_add(vc, comment);
+		tremoloLibrary.vorbis_comment_add(vc, comment);
 	}
 
 	static void vorbis_comment_add_tag (Pointer<vorbis_comment> vc, Pointer<Byte> tag, Pointer<Byte> contents)
 	{
-		jnaeratedLibrary.vorbis_comment_add_tag(vc, tag, contents);
+		tremoloLibrary.vorbis_comment_add_tag(vc, tag, contents);
 	}
 
 	static Pointer<Byte> vorbis_comment_query (Pointer<vorbis_comment> vc, Pointer<Byte> tag, int count)
 	{
-		return jnaeratedLibrary.vorbis_comment_query(vc, tag, count);
+		return tremoloLibrary.vorbis_comment_query(vc, tag, count);
 	}
 
 	static int vorbis_comment_query_count (Pointer<vorbis_comment> vc, Pointer<Byte> tag)
 	{
-		return jnaeratedLibrary.vorbis_comment_query_count(vc, tag);
+		return tremoloLibrary.vorbis_comment_query_count(vc, tag);
 	}
 
 	static void vorbis_comment_clear (Pointer<vorbis_comment> vc)
 	{
-		jnaeratedLibrary.vorbis_comment_clear(vc);
+		tremoloLibrary.vorbis_comment_clear(vc);
 	}
 
 	/* not used yet
@@ -291,123 +291,123 @@ class OvMarshal
 
 	static int ov_clear (Pointer<OggVorbis_File>  vf)
 	{
-		return jnaeratedLibrary.ov_clear(vf);
+		return tremoloLibrary.ov_clear(vf);
 	}
 
 	static int ov_open (Pointer<FILE> f, Pointer<OggVorbis_File> vf, Pointer<Byte> initial, long ibytes)
 	{
-		return jnaeratedLibrary.ov_open(f, vf, initial, ibytes);
+		return tremoloLibrary.ov_open(f, vf, initial, ibytes);
 	}
 
 	static int ov_open_callbacks (Pointer<Integer> datasource, Pointer<OggVorbis_File> vf, Pointer<Byte> initial, long ibytes, ov_callbacks callbacks)
 	{
-		return jnaeratedLibrary.ov_open_callbacks(datasource, vf, initial, ibytes, callbacks);
+		return tremoloLibrary.ov_open_callbacks(datasource, vf, initial, ibytes, callbacks);
 	}
 
 	static int ov_test (Pointer<FILE> f, Pointer<OggVorbis_File> vf, Pointer<Byte> initial, long ibytes)
 	{
-		return jnaeratedLibrary.ov_test(f, vf, initial, ibytes);
+		return tremoloLibrary.ov_test(f, vf, initial, ibytes);
 	}
 
 	static int ov_test_callbacks (Pointer<?> datasource, Pointer<OggVorbis_File> vf, Pointer<Byte> initial, long ibytes, ov_callbacks callbacks)
 	{
-		return jnaeratedLibrary.ov_test_callbacks(datasource, vf, initial, ibytes, callbacks);
+		return tremoloLibrary.ov_test_callbacks(datasource, vf, initial, ibytes, callbacks);
 	}
 
 	static int ov_test_open (Pointer<OggVorbis_File> vf)
 	{
-		return jnaeratedLibrary.ov_test_open(vf);
+		return tremoloLibrary.ov_test_open(vf);
 	}
 
 	static long ov_bitrate (Pointer<OggVorbis_File>  vf, int i)
 	{
-		return jnaeratedLibrary.ov_bitrate(vf, i);
+		return tremoloLibrary.ov_bitrate(vf, i);
 	}
 
 	static long ov_bitrate_instant (Pointer<OggVorbis_File>  vf)
 	{
-		return jnaeratedLibrary.ov_bitrate_instant(vf);
+		return tremoloLibrary.ov_bitrate_instant(vf);
 	}
 
 	static long ov_streams (Pointer<OggVorbis_File>  vf)
 	{
-		return jnaeratedLibrary.ov_streams(vf);
+		return tremoloLibrary.ov_streams(vf);
 	}
 
 	static long ov_seekable (Pointer<OggVorbis_File>  vf)
 	{
-		return jnaeratedLibrary.ov_seekable(vf);
+		return tremoloLibrary.ov_seekable(vf);
 	}
 
 	static long ov_serialnumber (Pointer<OggVorbis_File>  vf, int i)
 	{
-		return jnaeratedLibrary.ov_serialnumber(vf, i);
+		return tremoloLibrary.ov_serialnumber(vf, i);
 	}
 
 	static long ov_raw_total (Pointer<OggVorbis_File>  vf, int i)
 	{
-		return jnaeratedLibrary.ov_raw_total(vf, i);
+		return tremoloLibrary.ov_raw_total(vf, i);
 	}
 
 	static long ov_pcm_total (Pointer<OggVorbis_File>  vf, int i)
 	{
-		return jnaeratedLibrary.ov_pcm_total(vf, i);
+		return tremoloLibrary.ov_pcm_total(vf, i);
 	}
 
 	static long ov_time_total (Pointer<OggVorbis_File>  vf, int i)
 	{
-		return jnaeratedLibrary.ov_time_total(vf, i);
+		return tremoloLibrary.ov_time_total(vf, i);
 	}
 
 	static int ov_raw_seek (Pointer<OggVorbis_File>  vf, long pos)
 	{
-		return jnaeratedLibrary.ov_raw_seek(vf, pos);
+		return tremoloLibrary.ov_raw_seek(vf, pos);
 	}
 
 	static int ov_pcm_seek (Pointer<OggVorbis_File>  vf, long pos)
 	{
-		return jnaeratedLibrary.ov_pcm_seek(vf, pos);
+		return tremoloLibrary.ov_pcm_seek(vf, pos);
 	}
 
 	static int ov_pcm_seek_page (Pointer<OggVorbis_File>  vf, long pos)
 	{
-		return jnaeratedLibrary.ov_pcm_seek_page(vf, pos);
+		return tremoloLibrary.ov_pcm_seek_page(vf, pos);
 	}
 
 	static int ov_time_seek (Pointer<OggVorbis_File>  vf, long pos)
 	{
-		return jnaeratedLibrary.ov_time_seek(vf, pos);
+		return tremoloLibrary.ov_time_seek(vf, pos);
 	}
 
 	static long ov_raw_tell (Pointer<OggVorbis_File>  vf)
 	{
-		return jnaeratedLibrary.ov_raw_tell(vf);
+		return tremoloLibrary.ov_raw_tell(vf);
 	}
 
 	static long ov_pcm_tell (Pointer<OggVorbis_File>  vf)
 	{
-		return jnaeratedLibrary.ov_pcm_tell(vf);
+		return tremoloLibrary.ov_pcm_tell(vf);
 	}
 
 	static long ov_time_tell (Pointer<OggVorbis_File>  vf)
 	{
-		return jnaeratedLibrary.ov_time_tell(vf);
+		return tremoloLibrary.ov_time_tell(vf);
 	}
 
 	//[DllImport (FileLibrary)]
 	static Pointer<vorbis_info> ov_info (Pointer<OggVorbis_File>  vf, int link)
 	{
-		return jnaeratedLibrary.ov_info(vf, link);
+		return tremoloLibrary.ov_info(vf, link);
 	}
 
 	static Pointer<vorbis_comment> ov_comment (Pointer<OggVorbis_File>  vf, int link)
 	{
-		return jnaeratedLibrary.ov_comment(vf, link);
+		return tremoloLibrary.ov_comment(vf, link);
 	}
 
 	static int ov_read (Pointer<OggVorbis_File> vf, Pointer<?> buffer, int length, Pointer<Integer> bitstream)
 	{
-		return jnaeratedLibrary.ov_read(vf, buffer, length, bitstream);
+		return tremoloLibrary.ov_read(vf, buffer, length, bitstream);
 	}
 
 	//[DllImport ("libc")]

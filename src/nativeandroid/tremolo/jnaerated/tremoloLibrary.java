@@ -16,7 +16,7 @@ import org.bridj.cpp.CPPRuntime;
  */
 @Library("vorbisidec") 
 @Runtime(CPPRuntime.class) 
-public class jnaeratedLibrary {
+public class tremoloLibrary {
 	static {
 		BridJ.register();
 	}

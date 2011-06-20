@@ -106,17 +106,17 @@ public class Player
     		ed.putString("history.txt", sb.toString());
         }
 
-//    	try {
-          vorbis_buffer = new OggStreamBuffer (file.getAbsolutePath());
-//        vorbis_buffer = new OggStreamBuffer (new RandomAccessFile (file, "r"));
-        loop = new LoopCommentExtension (vorbis_buffer);
-        initializeVorbisBuffer ();
-//    	} catch (IOException ex) {
+    	try {
+//          vorbis_buffer = new OggStreamBuffer (file.getAbsolutePath());
+	        vorbis_buffer = new OggStreamBuffer (new RandomAccessFile (file, "r"));
+	        loop = new LoopCommentExtension (vorbis_buffer);
+	        initializeVorbisBuffer ();
+    	} catch (IOException ex) {
     		AlertDialog.Builder ab = new AlertDialog.Builder (activity.getApplicationContext());
     		ab.setTitle("error");
     		ab.setMessage("file could not be opened: ".concat(file.getName()));
     		ab.create().show();
-//    	}
+    	}
     }
 
     public void initializeVorbisBuffer ()
