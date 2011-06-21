@@ -121,7 +121,7 @@ public class Player
     		ab.setMessage("file could not be opened: ".concat(file.getName()));
     		ab.create().show();
     	}
-    	*/
+		*/
     }
 
     public void initializeVorbisBuffer ()
@@ -214,7 +214,6 @@ public class Player
         AudioTrack audio;
         Player player;
         boolean pause, finish;
-        Object pause_handle = new Object ();
         int x;
         byte [] buffer;
         long loop_start, loop_length, loop_end, total;
@@ -252,10 +251,8 @@ public class Player
 
         public void resume ()
         {
-            if (status == PlayerStatus.Paused)
-                pause_handle.notify ();
             status = PlayerStatus.Playing;
-            pause = false; // make sure to not get overwritten
+            pause = false;
         }
 
         long last_seek;
@@ -276,7 +273,7 @@ public class Player
         public void stop ()
         {
         	if (status == PlayerStatus.Paused)
-        		pause_handle.notify ();
+        		pause = false;
       		finish = true; // and let player loop finish.
         }
 
@@ -301,13 +298,13 @@ public class Player
     		while (!finish)
     		{
     		if (pause) {
-    		    pause = false;
     		    audio.pause ();
-    		    try {
-    		    	pause_handle.wait();
-    		    } catch (InterruptedException ex) {
-    		    	break;
-    		    }
+    		    while (pause)
+	    		    try {
+	    		    	Thread.sleep(400);
+	    		    } catch (InterruptedException ex) {
+	    		    	break;
+	    		    }
     		    audio.play ();
     		}
     		long size = player.vorbis_buffer.read (buffer, 0, buffer.length);
