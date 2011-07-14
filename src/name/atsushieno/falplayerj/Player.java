@@ -79,7 +79,7 @@ public class Player {
 	public void selectFile(File file) {
 		List<String> hist = getPlayHistory();
 		String abspath = file.getAbsolutePath();
-		if (!hist.contains(abspath)) {
+		if (/*!hist.contains(abspath)*/true) {
 			Context ctx = activity.getApplicationContext();
 			SharedPreferences sp = ctx.getSharedPreferences("falplayer",
 					Context.MODE_PRIVATE);
@@ -95,11 +95,15 @@ public class Player {
 			StringBuilder sb = new StringBuilder();
 			sb.append(abspath);
 			sb.append('\n');
-			for (String item : allhist)
+			int count = 0;
+			for (String item : allhist) {
+				if (++count == 30)
+					break;
 				if (!item.equals(abspath)) {
 					sb.append(item);
 					sb.append('\n');
 				}
+			}
 			ed.putString("history.txt", sb.toString());
 			ed.commit();
 		}
