@@ -1,0 +1,14 @@
+Falplayer (for Android Java Edition) is an Ogg Vorbis music player that
+supports loop. So you can enjoy listening to one ogg file infinitely
+as long as the player runs.
+
+This Falplayer is licensed under the MIT License. Sources are available at:
+https://github.com/atsushieno/falplayer-android-j
+
+Falplayer makes use of BridJ effort. I'm participating the development:
+http://code.google.com/p/bridj/
+
+Application icon is based on the picture at:
+http://www.flickr.com/photos/jackenhack/4271897410/
+
+Atsushi Eno
