@@ -58,8 +58,6 @@ public class Player {
 		view = new PlayerView(this, database, activity);
 		task = new CorePlayer(this);
 		headset_status_receiver = new HeadphoneStatusReceiver(this);
-		activity.registerReceiver(headset_status_receiver, new IntentFilter(
-				AudioManager.ACTION_AUDIO_BECOMING_NOISY));
 	}
 
 	List<String> getPlayHistory() {
@@ -283,6 +281,8 @@ public class Player {
 			total = 0;
 
 			audio.play();
+			activity.registerReceiver(headset_status_receiver, new IntentFilter(
+					AudioManager.ACTION_AUDIO_BECOMING_NOISY));
 			while (!finish) {
 				if (pause) {
 					audio.pause();
@@ -329,6 +329,7 @@ public class Player {
 			}
 			audio.flush();
 			audio.stop();
+			activity.unregisterReceiver(headset_status_receiver);
 			audio.release();
 			player.onComplete();
 			status = PlayerStatus.Stopped;
@@ -350,7 +351,7 @@ public class Player {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction() == AudioManager.ACTION_AUDIO_BECOMING_NOISY)
+			if (intent.getAction().equals(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
 				player.pause();
 		}
 	}
