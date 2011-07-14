@@ -5,6 +5,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -54,7 +55,6 @@ public class FalplayerActivity extends Activity {
 		List<String> list = new Vector();
 		getOggDirectories("/", list);
 		// getOggDirectories (new File ("/"), list);
-		android.util.Log.d("FALPLAYERXXXXX", "directory listing done");
 		StringBuilder sb = new StringBuilder();
 		for (String dir : list) {
 			sb.append(dir);
@@ -132,7 +132,7 @@ class PlayerView implements SeekBar.OnSeekBarChangeListener {
 
 	public PlayerView(Player player, TitleDatabase database,
 			FalplayerActivity activity) {
-		date_format = DateFormat.getTimeInstance();
+		date_format = new SimpleDateFormat ("mm:ss.SSS");
 
 		this.player = player;
 		this.database = database;
@@ -429,9 +429,10 @@ class PlayerView implements SeekBar.OnSeekBarChangeListener {
 	DateFormat date_format;
 
 	String getTimeline(long pos, long playTime) {
+		Date pt = new Date(playTime);
 		return String.format("loop: %d / cur: %d / end: %d\ntime: %s / %s",
-				loops, pos, loop_end, date_format.format(new Date(playTime)),
-				date_format.format(total_time));
+				loops, pos, loop_end, date_format.format(pt.getTime() - pt.getDate()),
+				date_format.format(total_time.getTime() - total_time.getDate()));
 	}
 
 	class ReportProgressRunnable implements Runnable {
