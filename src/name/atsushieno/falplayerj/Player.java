@@ -206,9 +206,9 @@ public class Player {
 		AudioTrack audio;
 		Player player;
 		boolean pause, finish;
-		int x;
 		byte[] buffer;
-		long loop_start, loop_length, loop_end, total;
+		long loop_start, loop_length, loop_end;
+		volatile long total;
 		Thread player_thread;
 
 		public CorePlayer(Player player) {
@@ -281,8 +281,8 @@ public class Player {
 		public void run() {
 			player.vorbis_buffer.seekRaw(0);
 			status = PlayerStatus.Playing;
-			x = 0;
 			total = 0;
+			int progress_sync = 0;
 
 			audio.play();
 			activity.registerReceiver(headset_status_receiver, new IntentFilter(
@@ -312,8 +312,10 @@ public class Player {
 					size = loop_end - total; // cut down the buffer after loop
 				total += size;
 
-				if (++x % 30 == 0)
+				if (++progress_sync % 30 == 0) {
+					progress_sync = 0;
 					player.onProgress(total);
+				}
 
 				// downgrade bitrate
 				int actualSize = (int) size * 2 / CompressionRate;
