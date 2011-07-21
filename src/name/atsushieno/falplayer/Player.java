@@ -1,4 +1,4 @@
-package name.atsushieno.falplayerj;
+package name.atsushieno.falplayer;
 
 import java.io.File;
 

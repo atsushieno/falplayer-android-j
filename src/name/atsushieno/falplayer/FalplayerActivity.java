@@ -1,4 +1,4 @@
-package name.atsushieno.falplayerj;
+package name.atsushieno.falplayer;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-import name.atsushieno.falplayerj.R;
+import name.atsushieno.falplayer.R;
 import nativeandroid.dirent.DirectoryEntry;
 
 import nativeandroid.dirent.DirectoryIterator;
