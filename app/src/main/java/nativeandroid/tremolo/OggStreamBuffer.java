@@ -115,7 +115,7 @@ public class OggStreamBuffer
 		vorbis_file = new OggVorbis_File ();
 		file = stdioLibrary.fopen(Pointer.pointerToCString(path), Pointer.pointerToCString("r"));
 		Pointer<OggVorbis_File> ov = Pointer.pointerTo(vorbis_file);
-		tremoloLibrary.ov_open(file, ov, Pointer.NULL, 0);
+		tremoloLibrary.ov_open(file, ov, (Pointer<Byte>) Pointer.NULL, 0);
 		callbacks = vorbis_file.callbacks();
 	}
 
@@ -140,7 +140,7 @@ public class OggStreamBuffer
 	}
 	
 	RandomAccessFile stream;
-	Pointer<FILE> file = Pointer.NULL;
+	Pointer<FILE> file = (Pointer<FILE>) Pointer.NULL;
 
 	//GCHandle handle_ovf;
 	Charset text_encoding;
