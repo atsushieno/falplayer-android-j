@@ -89,8 +89,7 @@
     <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="org.apache.commons.io-2.4" level="project" />
-    <orderEntry type="library" exported="" name="bridj-0.7.0" level="project" />
-    <orderEntry type="library" exported="" name="dx-1.7" level="project" />
     <orderEntry type="library" exported="" name="commons-io-2.4" level="project" />
+    <orderEntry type="library" exported="" name="bridj-0.7.1-SNAPSHOT-android" level="project" />
   </component>
 </module>

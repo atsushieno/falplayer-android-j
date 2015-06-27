@@ -40,7 +40,7 @@ public class FalplayerActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		//org.bridj.AndroidSupport.setApplication(getApplication());
+		org.bridj.AndroidWorkaround.setApplication(getApplication());
 
 		title_database = new TitleDatabase(this);
 		player = new Player(title_database, this);

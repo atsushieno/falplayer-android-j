@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="bridj-0.7.1-SNAPSHOT-android">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/src/main/libs/bridj-0.7.1-SNAPSHOT-android.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

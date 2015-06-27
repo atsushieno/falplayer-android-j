@@ -19,5 +19,5 @@ android {
 
 dependencies {
     compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
-    compile 'com.nativelibs4java:bridj:0.7.0'
+    compile files('src/main/libs/bridj-0.7.1-SNAPSHOT-android.jar')
 }
